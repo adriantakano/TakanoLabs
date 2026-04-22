@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Servicios de redes y asesoría TI para PYMEs — TakanoLabs. Próximamente.">
+    <meta name="author" content="TakanoLabs">
+    <title>TakanoLabs · Redes — Próximamente</title>
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/space-grotesk-v16-latin-500.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/space-grotesk-v16-latin-700.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/inter-v13-latin-regular.woff2">
+
+    <style>
+        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/space-grotesk-v16-latin-500.woff2') format('woff2')}
+        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/space-grotesk-v16-latin-700.woff2') format('woff2')}
+        @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/inter-v13-latin-regular.woff2') format('woff2')}
+        @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/inter-v13-latin-500.woff2') format('woff2')}
+        @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/jetbrains-mono-v18-latin-regular.woff2') format('woff2')}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{--clr-bg:#FAFAF8;--clr-bg-alt:#F4F4F0;--clr-surface:#FFFFFF;--clr-text:#0A0A0B;--clr-text-soft:#737373;--clr-accent:#4F46E5;--clr-accent-light:#818CF8;--clr-accent-bg:rgba(79,70,229,.08);--clr-border:#E7E5E4;--clr-dark:#0A0A0B;--clr-white:#FFFFFF;--ff-display:'Space Grotesk',system-ui,sans-serif;--ff-body:'Inter',system-ui,sans-serif;--ff-mono:'JetBrains Mono',ui-monospace,monospace;--space-xs:.5rem;--space-sm:1rem;--space-md:2rem;--space-lg:4rem;--space-xl:6rem;--space-2xl:8rem;--radius:14px;--radius-sm:8px;--transition:.35s cubic-bezier(.4,0,.2,1)}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:80px}
+        body{font-family:var(--ff-body);font-weight:400;font-size:1rem;line-height:1.7;color:var(--clr-text);background:var(--clr-dark);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+        a{color:inherit;text-decoration:none}
+        h1,h2,h3{font-family:var(--ff-display);font-weight:500;line-height:1.1}
+        .nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(10,10,11,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+        .nav__inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:var(--space-sm) var(--space-md)}
+        .nav__logo{display:flex;align-items:center;gap:8px;font-family:var(--ff-display);font-weight:700;font-size:1.15rem;letter-spacing:-.02em;color:var(--clr-white)}
+        .nav__logo-mark{width:28px;height:28px;border-radius:7px;background:var(--clr-white);color:var(--clr-dark);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:.75rem;font-weight:400}
+        .nav__menu{display:flex;align-items:center;gap:var(--space-md)}
+        .nav__link{font-size:.85rem;font-weight:500;color:rgba(255,255,255,.6);transition:color var(--transition)}
+        .nav__link:hover,.nav__link--active{color:var(--clr-white)}
+        .nav__link--cta{background:var(--clr-accent);color:var(--clr-white)!important;padding:.55rem 1.25rem;border-radius:100px}
+        .nav__link--cta:hover{background:var(--clr-accent-light)}
+        .nav__toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;z-index:1001}
+        .nav__toggle span{display:block;width:24px;height:2px;background:var(--clr-white);border-radius:2px;transition:var(--transition)}
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:.85rem 1.75rem;font-family:var(--ff-body);font-size:.9rem;font-weight:500;border-radius:100px;cursor:pointer;transition:all var(--transition);border:none}
+        .btn--primary{background:var(--clr-accent);color:var(--clr-white)}
+        .btn--primary:hover{background:var(--clr-accent-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,70,229,.35)}
+        .btn--outline{background:transparent;color:var(--clr-white);border:1.5px solid rgba(255,255,255,.2)}
+        .btn--outline:hover{border-color:var(--clr-accent-light);color:var(--clr-accent-light);transform:translateY(-2px)}
+        @media(max-width:640px){.nav__toggle{display:flex}.nav__menu{position:fixed;top:0;right:-100%;width:75%;max-width:320px;height:100vh;height:100dvh;background:#0A0A0B;flex-direction:column;justify-content:center;align-items:center;gap:var(--space-md);transition:right var(--transition);border-left:1px solid rgba(255,255,255,.08)}.nav__menu--open{right:0}.nav__link{font-size:1.1rem}}
+    </style>
+    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null;" href="css/style.css">
+    <noscript><link rel="stylesheet" href="css/style.css"></noscript>
+</head>
+
+<body>
+
+    <header class="nav" id="nav">
+        <div class="nav__inner">
+            <a href="diseñoweb.html" class="nav__logo">
+                <span class="nav__logo-mark">T</span>
+                <span>TakanoLabs</span>
+            </a>
+            <button class="nav__toggle" id="navToggle" aria-label="Menú">
+                <span></span><span></span><span></span>
+            </button>
+            <nav class="nav__menu" id="navMenu">
+                <a href="diseñoweb.html" class="nav__link">Diseño web</a>
+                <a href="servicioredes.html" class="nav__link nav__link--active">Redes</a>
+                <a href="contacto.html" class="nav__link nav__link--cta">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="construction">
+        <div class="construction__grid-lines"></div>
+        <div class="construction__content">
+            <span class="construction__tag">
+                <span class="construction__tag-dot"></span>
+                En desarrollo · Redes &amp; TI
+            </span>
+            <h1 class="construction__title">Página en construcción</h1>
+            <p class="construction__desc">
+                Estamos preparando la sección de servicios de redes informáticas y
+                asesoría TI para PYMEs: diseño LAN/WLAN, CCNA, seguridad y
+                optimización de infraestructura. Vuelve pronto.
+            </p>
+            <div class="construction__actions">
+                <a href="diseñoweb.html" class="btn btn--primary">Ver diseño web</a>
+                <a href="contacto.html" class="btn btn--outline">Contacto</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" style="background:#0A0A0B;border-top-color:rgba(255,255,255,.08)">
+        <div class="container footer__inner" style="color:rgba(255,255,255,.5)">
+            <span class="footer__copy" style="color:rgba(255,255,255,.4)">© 2026 TakanoLabs · Allende, Nuevo León · MX</span>
+            <div class="footer__links">
+                <a href="diseñoweb.html" style="color:rgba(255,255,255,.5)">Diseño web</a>
+                <a href="servicioredes.html" style="color:rgba(255,255,255,.5)">Redes</a>
+                <a href="contacto.html" style="color:rgba(255,255,255,.5)">Contacto</a>
+                <a href="index.html" style="color:rgba(255,255,255,.5)">Blog</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
