@@ -569,6 +569,10 @@
     transform: none;
 }
 
+.contact__form-success[hidden] {
+    display: none !important;
+}
+
 .contact__form-success {
     display: flex;
     flex-direction: column;

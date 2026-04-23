@@ -35,8 +35,8 @@
         .nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(250,250,248,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:border-color var(--transition),box-shadow var(--transition)}
         .nav--scrolled{border-bottom-color:var(--clr-border);box-shadow:0 1px 12px rgba(10,10,11,.04)}
         .nav__inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:var(--space-sm) var(--space-md)}
-        .nav__logo{display:flex;align-items:center;gap:8px;font-family:var(--ff-display);font-weight:700;font-size:1.15rem;letter-spacing:-.02em;color:var(--clr-text)}
-        .nav__logo-mark{width:28px;height:28px;border-radius:7px;background:var(--clr-dark);color:var(--clr-white);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:.75rem;font-weight:400;letter-spacing:-.02em}
+        .nav__logo{display:flex;align-items:center;color:var(--clr-text)}
+        .nav__logo img{height:48px;width:auto;display:block}
         .nav__menu{display:flex;align-items:center;gap:var(--space-md)}
         .nav__link{font-size:.875rem;font-weight:500;letter-spacing:.01em;color:var(--clr-text-soft);position:relative;transition:color var(--transition)}
         .nav__link::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:1.5px;background:var(--clr-accent);transition:width var(--transition)}
@@ -92,16 +92,14 @@
     <!-- ===================== NAV ===================== -->
     <header class="nav" id="nav">
         <div class="nav__inner">
-            <a href="diseñoweb.html" class="nav__logo">
-                <span class="nav__logo-mark">T</span>
-                <span>TakanoLabs</span>
+            <a href="diseñoweb.html" class="nav__logo" aria-label="TakanoLabs">
+                <img src="img/Logo1.webp" alt="TakanoLabs" width="1091" height="312">
             </a>
             <button class="nav__toggle" id="navToggle" aria-label="Menú">
                 <span></span><span></span><span></span>
             </button>
             <nav class="nav__menu" id="navMenu">
                 <a href="diseñoweb.html" class="nav__link nav__link--active">Diseño web</a>
-                <a href="servicioredes.html" class="nav__link">Redes</a>
                 <a href="contacto.html" class="nav__link nav__link--cta">Contacto</a>
             </nav>
         </div>
@@ -119,12 +117,8 @@
         <div class="hero__grid-lines"></div>
 
         <div class="hero__content">
-            <span class="hero__tag reveal">
-                <span class="hero__tag-dot"></span>
-                JAMstack · Cloudflare · Edge-native
-            </span>
             <h1 class="hero__title reveal">
-                Velocidad global.<br><em>Costo de PYME.</em>
+                Creamos sitios web con<br>velocidad global. <em>Costo de PYME.</em>
             </h1>
             <p class="hero__lede reveal reveal--delay-1">
                 La infraestructura de las big tech, construida para tu PYME.
@@ -133,25 +127,6 @@
                 <a href="#paquetes" class="btn btn--primary">Ver paquetes</a>
                 <a href="contacto.html" class="btn btn--outline" style="color:#fff;border-color:rgba(255,255,255,.25)">Agenda diagnóstico</a>
             </div>
-
-            <div class="hero__strip reveal reveal--delay-2">
-                <div class="hero__strip-item">
-                    &lt; 1s
-                    <strong>Tiempo de carga</strong>
-                </div>
-                <div class="hero__strip-item">
-                    300+
-                    <strong>Nodos globales</strong>
-                </div>
-                <div class="hero__strip-item">
-                    99.99%
-                    <strong>Disponibilidad</strong>
-                </div>
-                <div class="hero__strip-item">
-                    $0
-                    <strong>Infra. inicial</strong>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -159,10 +134,10 @@
     <section class="section arch" id="arquitectura">
         <div class="container">
             <span class="section__label reveal">// 01 · Arquitectura</span>
-            <h2 class="section__title reveal">Una arquitectura moderna,<br>diseñada para durar.</h2>
+            <h2 class="section__title reveal">Un sitio web que carga<br>rápido desde cualquier parte.</h2>
             <p class="section__subtitle reveal">
-                JAMstack + edge computing: contenido servido desde el datacenter más cercano,
-                lógica serverless sin servidores que administrar, base de datos sin mantenimiento.
+                Tu sitio vive copiado en cientos de servidores alrededor del mundo, así cada
+                visitante lo recibe desde el más cercano. Nada que instalar, nada que mantener.
                 El mismo modelo que usan Netflix, Uber y LinkedIn — sin el costo que suponen.
             </p>
 
@@ -182,7 +157,7 @@
                         </svg>
                     </div>
                     <h3>CDN global</h3>
-                    <p>Contenido estático distribuido en 300+ datacenters de Cloudflare. Cada visitante recibe el sitio desde el servidor más cercano.</p>
+                    <p>Una CDN es una red que replica tu sitio en más de 300 ciudades del mundo. El resultado: tu página carga casi al instante, sin importar dónde esté el visitante.</p>
                 </article>
 
                 <article class="arch-card reveal">
@@ -193,8 +168,8 @@
                             <polyline points="8 6 2 12 8 18"/>
                         </svg>
                     </div>
-                    <h3>Backend serverless</h3>
-                    <p>Lógica de negocio en Cloudflare Workers. Arranca en &lt; 1 ms, escala automáticamente y no hay servidores que mantener.</p>
+                    <h3>Backend sin servidores</h3>
+                    <p>Las partes interactivas de tu sitio (formularios, usuarios, compras) corren en la nube. Se adaptan solas al número de visitantes y no hay un servidor que pagar ni mantener.</p>
                 </article>
 
                 <article class="arch-card reveal">
@@ -206,8 +181,8 @@
                             <path d="M3 12a9 3 0 0 0 18 0"/>
                         </svg>
                     </div>
-                    <h3>Base de datos D1</h3>
-                    <p>SQLite distribuido gestionado por Cloudflare. SQL estándar, backups automáticos, restauración a cualquier punto en 30 días.</p>
+                    <h3>Base de datos gestionada</h3>
+                    <p>La información de tu negocio (usuarios, productos, contactos) se guarda en una base de datos segura, con respaldos automáticos y posibilidad de restaurar cualquier día de los últimos 30.</p>
                 </article>
             </div>
         </div>
@@ -217,11 +192,11 @@
     <section class="section compare">
         <div class="container">
             <span class="section__label reveal">// 02 · Rendimiento</span>
-            <h2 class="section__title reveal">Hosting tradicional vs.<br>infraestructura distribuida.</h2>
+            <h2 class="section__title reveal">Hosting tradicional vs.<br>la red de Cloudflare.</h2>
             <p class="section__subtitle reveal">
-                La diferencia no es marginal. Una PYME alojada en hosting compartido
-                típico enfrenta latencias 4–10× más altas, tiempos de carga visibles
-                y costos que crecen de forma impredecible.
+                Cloudflare es la red que protege y acelera a miles de empresas globales.
+                Al colocar tu sitio sobre ella, cargas más rápido, aguantas más visitantes
+                y obtienes seguridad automática — todo sin configurar nada.
             </p>
 
             <div class="compare-table reveal">
@@ -273,10 +248,10 @@
     <section class="section stack" id="stack">
         <div class="container">
             <span class="section__label reveal">// 03 · Stack</span>
-            <h2 class="section__title reveal">Tecnología deliberadamente<br>moderna y estable.</h2>
+            <h2 class="section__title reveal">Herramientas probadas,<br>no experimentos.</h2>
             <p class="section__subtitle reveal">
-                Cada componente fue elegido por su eficiencia, costo y respaldo industrial.
-                Sin experimentos — es el mismo stack que sostiene productos críticos en
+                Trabajamos con tecnologías estables y reconocidas, elegidas por su
+                confiabilidad y bajo costo — el mismo conjunto que sostiene a
                 Netflix, PayPal, LinkedIn y NASA.
             </p>
 
@@ -460,7 +435,6 @@
             <span class="footer__copy">© 2026 TakanoLabs · Allende, Nuevo León · MX</span>
             <div class="footer__links">
                 <a href="diseñoweb.html">Diseño web</a>
-                <a href="servicioredes.html">Redes</a>
                 <a href="contacto.html">Contacto</a>
                 <a href="index.html">Blog</a>
             </div>

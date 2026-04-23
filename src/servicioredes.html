@@ -26,8 +26,8 @@
         h1,h2,h3{font-family:var(--ff-display);font-weight:500;line-height:1.1}
         .nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(10,10,11,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
         .nav__inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:var(--space-sm) var(--space-md)}
-        .nav__logo{display:flex;align-items:center;gap:8px;font-family:var(--ff-display);font-weight:700;font-size:1.15rem;letter-spacing:-.02em;color:var(--clr-white)}
-        .nav__logo-mark{width:28px;height:28px;border-radius:7px;background:var(--clr-white);color:var(--clr-dark);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:.75rem;font-weight:400}
+        .nav__logo{display:flex;align-items:center;color:var(--clr-white)}
+        .nav__logo img{height:48px;width:auto;display:block;filter:brightness(0) invert(1)}
         .nav__menu{display:flex;align-items:center;gap:var(--space-md)}
         .nav__link{font-size:.85rem;font-weight:500;color:rgba(255,255,255,.6);transition:color var(--transition)}
         .nav__link:hover,.nav__link--active{color:var(--clr-white)}
@@ -50,16 +50,14 @@
 
     <header class="nav" id="nav">
         <div class="nav__inner">
-            <a href="diseñoweb.html" class="nav__logo">
-                <span class="nav__logo-mark">T</span>
-                <span>TakanoLabs</span>
+            <a href="diseñoweb.html" class="nav__logo" aria-label="TakanoLabs">
+                <img src="img/Logo1.webp" alt="TakanoLabs" width="1091" height="312">
             </a>
             <button class="nav__toggle" id="navToggle" aria-label="Menú">
                 <span></span><span></span><span></span>
             </button>
             <nav class="nav__menu" id="navMenu">
                 <a href="diseñoweb.html" class="nav__link">Diseño web</a>
-                <a href="servicioredes.html" class="nav__link nav__link--active">Redes</a>
                 <a href="contacto.html" class="nav__link nav__link--cta">Contacto</a>
             </nav>
         </div>
@@ -90,7 +88,6 @@
             <span class="footer__copy" style="color:rgba(255,255,255,.4)">© 2026 TakanoLabs · Allende, Nuevo León · MX</span>
             <div class="footer__links">
                 <a href="diseñoweb.html" style="color:rgba(255,255,255,.5)">Diseño web</a>
-                <a href="servicioredes.html" style="color:rgba(255,255,255,.5)">Redes</a>
                 <a href="contacto.html" style="color:rgba(255,255,255,.5)">Contacto</a>
                 <a href="index.html" style="color:rgba(255,255,255,.5)">Blog</a>
             </div>
