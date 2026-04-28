@@ -4,6 +4,13 @@
    El CSS crítico (fuentes, reset, nav, hero) va inline en cada HTML.
    ============================================================= */
 
+/* ========== UTILIDADES GLOBALES ========== */
+/* Garantiza que cualquier elemento con el atributo [hidden] quede oculto,
+   sin importar qué otra regla aplique display:flex/grid/block después. */
+[hidden] {
+    display: none !important;
+}
+
 /* ========== SECCIONES BASE ========== */
 .section {
     padding: var(--space-2xl) 0;
@@ -567,10 +574,6 @@
     opacity: .6;
     cursor: not-allowed;
     transform: none;
-}
-
-.contact__form-success[hidden] {
-    display: none !important;
 }
 
 .contact__form-success {
