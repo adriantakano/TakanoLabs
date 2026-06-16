@@ -42,7 +42,7 @@ async function notificarResend(env, { nombre, correo, giro_empresa, descripcion 
             'Authorization': `Bearer ${env.RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-            from: 'TakanoLabs <notificaciones@adriantakano.com>',
+            from: 'TakanoLabs <notificaciones@takanolabs.com>',
             to: 'adrian.takano@icloud.com',
             reply_to: correo,
             subject: `Nuevo contacto TakanoLabs: ${nombre}`,
@@ -107,10 +107,10 @@ export async function onRequestPost({ request, env }) {
             descripcion: descripcion.trim(),
         };
 
-        // 1) Persistir en D1
+        // 1) Persistir en D1 (origen 'takanolabs': formulario de takanolabs.com/web)
         await env.DB
-            .prepare('INSERT INTO contactos (nombre, correo, giro_empresa, descripcion) VALUES (?, ?, ?, ?)')
-            .bind(datos.nombre, datos.correo, datos.giro_empresa, datos.descripcion)
+            .prepare('INSERT INTO contactos (nombre, correo, giro_empresa, descripcion, origen) VALUES (?, ?, ?, ?, ?)')
+            .bind(datos.nombre, datos.correo, datos.giro_empresa, datos.descripcion, 'takanolabs')
             .run();
 
         // 2) Notificar por correo (no bloqueante en caso de error)

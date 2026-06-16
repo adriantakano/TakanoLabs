@@ -32,7 +32,7 @@ async function enviarConfirmacion(env, email) {
             'Authorization': `Bearer ${env.RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-            from: 'Takano Labs <notificaciones@adriantakano.com>',
+            from: 'Takano Labs <notificaciones@takanolabs.com>',
             to: email,
             subject: '¡Listo! Estás suscrito al boletín de Takano Labs',
             html: `
