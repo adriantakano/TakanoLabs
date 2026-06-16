@@ -55,7 +55,7 @@ const fallback = all
   <script type="application/json" data-mr-manifest set:html={JSON.stringify(manifest)}></script>
 </section>
 
-<style>
+<style is:global>
   .mr__title {
     font-family: var(--ff-mono); font-size: 0.78rem; font-weight: 400;
     text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-fg-subtle);
@@ -81,6 +81,9 @@ const fallback = all
     letter-spacing: -0.02em; transition: opacity 0.15s ease;
   }
   .mr__item:hover .mr__t { opacity: 0.7; }
+
+  /* El island regenera estos nodos por JS (sin atributo de scope de Astro);
+     por eso las reglas .mr__* deben ser globales para no perder estilo tras el swap. */
 </style>
 
 <script>
