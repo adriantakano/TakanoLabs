@@ -1,0 +1,71 @@
+---
+/* Bloque de autor — texto libre + avatar, leído del frontmatter del post.
+   - Sin registro de autores ni authorId.
+   - authorImage ausente -> default.webp (el build NO falla).
+   - Icono LinkedIn SOLO si authorLinkedin existe y no está vacío. */
+import { SITE } from '../config/site';
+
+interface Props {
+  author: string;
+  authorRole: string;
+  authorImage?: string;
+  authorLinkedin?: string;
+  size?: 'sm' | 'md';
+}
+
+const { author, authorRole, authorImage, authorLinkedin, size = 'md' } = Astro.props;
+const avatar = authorImage && authorImage.trim() ? authorImage : SITE.defaultAuthorImage;
+const hasLinkedin = !!(authorLinkedin && authorLinkedin.trim());
+const px = size === 'md' ? 48 : 36;
+---
+<div class:list={['author', size]}>
+  <img
+    class="author__avatar"
+    src={avatar}
+    alt={`Foto de ${author}`}
+    width={px}
+    height={px}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="author__meta">
+    <span class="author__name">{author}</span>
+    <span class="author__role">{authorRole}</span>
+  </div>
+  {hasLinkedin && (
+    <a
+      class="author__linkedin"
+      href={authorLinkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Perfil de LinkedIn de ${author}`}
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+      </svg>
+    </a>
+  )}
+</div>
+
+<style>
+  .author { display: flex; align-items: center; gap: var(--space-3); }
+  .author__avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--color-muted, #ededed);
+    flex-shrink: 0;
+  }
+  .md .author__avatar { width: 48px; height: 48px; }
+  .sm .author__avatar { width: 36px; height: 36px; }
+  .author__meta { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+  .author__name { font-family: var(--ff-display); font-weight: 700; font-size: 0.95rem; }
+  .author__role { font-family: var(--ff-mono); font-size: 0.72rem; color: var(--color-fg-subtle); }
+  .author__linkedin {
+    margin-inline-start: auto;
+    color: var(--color-fg-subtle);
+    display: inline-flex;
+    padding: 6px;            /* amplía área táctil (>=44px con el icono) */
+    transition: color 0.15s ease;
+  }
+  .author__linkedin:hover { color: var(--color-fg); }
+</style>

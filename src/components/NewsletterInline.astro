@@ -1,0 +1,132 @@
+---
+/* Formulario de newsletter -> POST /api/newsletter.
+   Honeypot anti-spam (campo "website" oculto). `source` = slug de origen.
+   id="newsletter" sirve de ancla para el enlace del menú. */
+interface Props {
+  source?: string;
+  variant?: 'light' | 'boxed';
+}
+const { source = '', variant = 'boxed' } = Astro.props;
+---
+<section class:list={['nl', variant]} id="newsletter" aria-labelledby="nl-title">
+  <div class="container nl__inner">
+    <h2 id="nl-title" class="nl__title">Suscríbete al boletín</h2>
+    <p class="nl__desc">
+      Lo nuevo de Química&nbsp;&amp;&nbsp;Vida, Economía Digital y Pulso Urbano,
+      directo a tu correo. Sin spam.
+    </p>
+    <form class="nl__form" data-newsletter novalidate>
+      <input type="hidden" name="source" value={source} />
+      <!-- Honeypot: invisible para humanos, lo llenan los bots. -->
+      <div class="nl__hp" aria-hidden="true">
+        <label>No llenar este campo
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+      <label class="nl__field">
+        <span class="visually-hidden">Correo electrónico</span>
+        <input
+          type="email"
+          name="email"
+          inputmode="email"
+          autocomplete="email"
+          placeholder="tu@correo.com"
+          required
+        />
+      </label>
+      <button type="submit" class="nl__submit">Suscribirme</button>
+      <p class="nl__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .nl { margin-block: var(--space-8); }
+  .nl.boxed .nl__inner {
+    max-width: var(--content-max); background: #f6f6f4;
+    border: 1px solid var(--color-border); border-radius: 12px;
+    padding: var(--space-8); margin-inline: auto;
+  }
+  .nl__title {
+    font-family: var(--ff-display); font-weight: 700; font-size: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  .nl__desc {
+    font-family: var(--ff-body), Georgia, serif; color: var(--color-fg-muted);
+    margin-top: var(--space-2); max-width: 46ch;
+  }
+  .nl__form {
+    display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6);
+    align-items: center;
+  }
+  .nl__field { flex: 1 1 16rem; }
+  .nl__field input {
+    width: 100%; height: 48px; padding-inline: var(--space-4);
+    font: inherit; font-family: var(--ff-display);
+    border: 1px solid var(--color-fg); border-radius: 8px; background: var(--color-bg);
+  }
+  .nl__field input:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 1px; }
+  .nl__submit {
+    height: 48px; padding-inline: var(--space-6);
+    font-family: var(--ff-display); font-weight: 700;
+    background: var(--color-fg); color: var(--color-bg);
+    border: 0; border-radius: 8px; transition: opacity 0.15s ease;
+  }
+  .nl__submit:hover { opacity: 0.85; }
+  .nl__submit:disabled { opacity: 0.5; cursor: progress; }
+  .nl__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .nl__status {
+    flex-basis: 100%; font-family: var(--ff-mono); font-size: 0.8rem;
+    margin-top: var(--space-1); min-height: 1.2em;
+  }
+  .nl__status[data-state='ok'] { color: #407C16; }
+  .nl__status[data-state='error'] { color: #c0392b; }
+</style>
+
+<script>
+  document.querySelectorAll('form[data-newsletter]').forEach((form) => {
+    const f = form as HTMLFormElement;
+    const status = f.querySelector('.nl__status') as HTMLElement | null;
+    const btn = f.querySelector('.nl__submit') as HTMLButtonElement | null;
+
+    const setStatus = (msg: string, state: string) => {
+      if (!status) return;
+      status.textContent = msg;
+      status.setAttribute('data-state', state);
+    };
+
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(f);
+      const email = String(data.get('email') || '').trim();
+      const website = String(data.get('website') || '');
+      const source = String(data.get('source') || '');
+
+      if (!email) { setStatus('Escribe tu correo.', 'error'); return; }
+      if (btn) btn.disabled = true;
+      setStatus('Enviando…', '');
+
+      try {
+        const res = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, website, source }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json.ok) {
+          setStatus(
+            json.alreadySubscribed ? 'Ya estabas suscrito. ¡Gracias!' : '¡Listo! Revisa tu correo.',
+            'ok',
+          );
+          f.reset();
+        } else {
+          setStatus(json.error || 'No se pudo completar. Intenta de nuevo.', 'error');
+        }
+      } catch {
+        setStatus('Error de red. Intenta de nuevo.', 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,25 @@
+---
+/* CTA de servicios (→ /web). Va en el pie de artículos y páginas de categoría. */
+import { SITE } from '../config/site';
+---
+<aside class="cta-web" aria-label="Servicios de diseño web">
+  <div class="container cta-web__inner">
+    <p class="cta-web__text">
+      ¿Necesitas una página web profesional?
+      <a href={SITE.servicesUrl}>Conoce mis servicios de diseño y desarrollo web&nbsp;→</a>
+    </p>
+  </div>
+</aside>
+
+<style>
+  .cta-web { border-top: 1px solid var(--color-border); }
+  .cta-web__inner { padding-block: var(--space-8); max-width: var(--content-max); }
+  .cta-web__text {
+    font-family: var(--ff-display); font-weight: 500; font-size: 1.15rem; line-height: 1.5;
+  }
+  .cta-web__text a {
+    font-weight: 700; text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
+  }
+  .cta-web__text a:hover { opacity: 0.7; }
+</style>

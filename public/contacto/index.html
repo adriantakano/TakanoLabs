@@ -8,16 +8,16 @@
     <meta name="author" content="TakanoLabs">
     <title>TakanoLabs · Contacto</title>
 
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/space-grotesk-v16-latin-500.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/space-grotesk-v16-latin-700.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/inter-v13-latin-regular.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/space-grotesk-v16-latin-500.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/space-grotesk-v16-latin-700.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-v13-latin-regular.woff2">
 
     <style>
-        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/space-grotesk-v16-latin-500.woff2') format('woff2')}
-        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/space-grotesk-v16-latin-700.woff2') format('woff2')}
-        @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/inter-v13-latin-regular.woff2') format('woff2')}
-        @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/inter-v13-latin-500.woff2') format('woff2')}
-        @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/jetbrains-mono-v18-latin-regular.woff2') format('woff2')}
+        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/space-grotesk-v16-latin-500.woff2') format('woff2')}
+        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/space-grotesk-v16-latin-700.woff2') format('woff2')}
+        @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/inter-v13-latin-regular.woff2') format('woff2')}
+        @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/inter-v13-latin-500.woff2') format('woff2')}
+        @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/jetbrains-mono-v18-latin-regular.woff2') format('woff2')}
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
         [hidden]{display:none!important}
         :root{--clr-bg:#FAFAF8;--clr-bg-alt:#F4F4F0;--clr-surface:#FFFFFF;--clr-text:#0A0A0B;--clr-text-soft:#737373;--clr-accent:#4F46E5;--clr-accent-light:#818CF8;--clr-accent-bg:rgba(79,70,229,.08);--clr-border:#E7E5E4;--clr-dark:#0A0A0B;--clr-white:#FFFFFF;--ff-display:'Space Grotesk',system-ui,sans-serif;--ff-body:'Inter',system-ui,sans-serif;--ff-mono:'JetBrains Mono',ui-monospace,monospace;--space-xs:.5rem;--space-sm:1rem;--space-md:2rem;--space-lg:4rem;--space-xl:6rem;--space-2xl:8rem;--radius:14px;--radius-sm:8px;--transition:.35s cubic-bezier(.4,0,.2,1)}
@@ -60,23 +60,23 @@
         .reveal--delay-1{transition-delay:.12s}
         @media(max-width:640px){:root{--space-lg:3rem;--space-xl:4rem}.nav__toggle{display:flex}.nav__menu{position:fixed;top:0;right:-100%;width:75%;max-width:320px;height:100vh;height:100dvh;background:var(--clr-surface);flex-direction:column;justify-content:center;align-items:center;gap:var(--space-md);transition:right var(--transition);box-shadow:-4px 0 24px rgba(10,10,11,.1)}.nav__menu--open{right:0}.nav__link{font-size:1.1rem}}
     </style>
-    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null;" href="css/style.css">
-    <noscript><link rel="stylesheet" href="css/style.css"></noscript>
+    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null;" href="/css/style.css">
+    <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
 </head>
 
 <body>
 
     <header class="nav" id="nav">
         <div class="nav__inner">
-            <a href="diseñoweb.html" class="nav__logo" aria-label="TakanoLabs">
-                <img src="img/Logo1.webp" alt="TakanoLabs" width="1091" height="312">
+            <a href="/web" class="nav__logo" aria-label="TakanoLabs">
+                <img src="/img/Logo1.webp" alt="TakanoLabs" width="1091" height="312">
             </a>
             <button class="nav__toggle" id="navToggle" aria-label="Menú">
                 <span></span><span></span><span></span>
             </button>
             <nav class="nav__menu" id="navMenu">
-                <a href="diseñoweb.html" class="nav__link">Diseño web</a>
-                <a href="contacto.html" class="nav__link nav__link--active">Contacto</a>
+                <a href="/web" class="nav__link">Diseño web</a>
+                <a href="/contacto" class="nav__link nav__link--active">Contacto</a>
             </nav>
         </div>
     </header>
@@ -161,13 +161,13 @@
         <div class="container footer__inner">
             <span class="footer__copy">© 2026 TakanoLabs · Allende, Nuevo León · MX</span>
             <div class="footer__links">
-                <a href="diseñoweb.html">Diseño web</a>
-                <a href="contacto.html">Contacto</a>
-                <a href="index.html">Blog</a>
+                <a href="/web">Diseño web</a>
+                <a href="/contacto">Contacto</a>
+                <a href="/web">Blog</a>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>

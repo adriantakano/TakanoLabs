@@ -1,0 +1,107 @@
+---
+/* Layout de página de categoría: cabecera + rejilla de artículos. */
+import BaseLayout from './BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import CTAServiciosWeb from '../components/CTAServiciosWeb.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { getCategory } from '../config/categories';
+import { SITE } from '../config/site';
+
+interface PostData {
+  section: string;
+  slug: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  heroImageAlt: string;
+  pubDate: Date;
+  readingTime?: number;
+}
+interface Props {
+  section: string;
+  posts: PostData[];
+}
+
+const { section, posts } = Astro.props;
+const cat = getCategory(section);
+
+const categoryUrlAbs = cat ? new URL(`/${cat.segment}`, SITE.url).href : SITE.url;
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url },
+    { '@type': 'ListItem', position: 2, name: cat?.name ?? 'Categoría', item: categoryUrlAbs },
+  ],
+};
+---
+<BaseLayout
+  title={cat ? `${cat.name}` : 'Categoría'}
+  description={cat?.description ?? SITE.description}
+  ogImage={cat?.ogImage}
+  activeSegment={cat?.segment}
+>
+  <Fragment slot="head">
+    <JsonLd schema={breadcrumbSchema} />
+  </Fragment>
+  <div class="container cat">
+    <header class="cat__header" style={`--cat:${cat?.color}`}>
+      <p class="cat__kicker">Sección</p>
+      <h1 class="cat__title">{cat?.name}</h1>
+      <p class="cat__desc">{cat?.description}</p>
+    </header>
+
+    {posts.length === 0 ? (
+      <p class="cat__empty">Aún no hay artículos publicados en esta sección.</p>
+    ) : (
+      <ul class="cat__grid" role="list">
+        {posts.map((post, i) => (
+          <li>
+            <ArticleCard
+              section={post.section}
+              slug={post.slug}
+              title={post.title}
+              description={post.description}
+              heroImage={post.heroImage}
+              heroImageAlt={post.heroImageAlt}
+              pubDate={post.pubDate}
+              readingTime={post.readingTime}
+              variant="small"
+              eager={i === 0}
+            />
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+
+  <CTAServiciosWeb />
+</BaseLayout>
+
+<style>
+  .cat { padding-block: var(--space-8) var(--space-8); }
+  .cat__header {
+    border-top: 4px solid var(--cat); padding-top: var(--space-4);
+    margin-bottom: var(--space-12); max-width: 48rem;
+  }
+  .cat__kicker {
+    font-family: var(--ff-mono); font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--color-fg-subtle);
+  }
+  .cat__title {
+    font-family: var(--ff-display); font-weight: 700; color: var(--cat);
+    font-size: clamp(2rem, 7vw, 3.2rem); letter-spacing: -0.03em; line-height: 1.05;
+    margin-block: var(--space-2);
+  }
+  .cat__desc {
+    font-family: var(--ff-body), Georgia, serif; font-size: 1.125rem;
+    color: var(--color-fg-muted); max-width: 50ch;
+  }
+  .cat__empty { font-family: var(--ff-body), Georgia, serif; color: var(--color-fg-muted); }
+  .cat__grid {
+    display: grid; gap: var(--space-8);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) { .cat__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cat__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-12) var(--space-8); } }
+</style>

@@ -1,0 +1,79 @@
+/* =============================================================
+   prose.css — tipografía del cuerpo del artículo (serif legible).
+   Se aplica al contenedor .prose que envuelve el <Content/> del .md.
+   ============================================================= */
+.prose {
+  font-family: var(--ff-body), 'Newsreader Fallback', Georgia, serif;
+  font-size: 1.1875rem;        /* ~19px: lectura cómoda en móvil */
+  line-height: 1.7;
+  color: var(--color-fg);
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+@media (min-width: 768px) {
+  .prose { font-size: 1.25rem; line-height: 1.75; }
+}
+
+/* Párrafos y medida de lectura */
+.prose > p { margin-block: 0 1.4em; }
+.prose > p:first-child { font-size: 1.05em; }   /* entradilla un poco mayor */
+
+/* Encabezados de sección: sans fuerte para contraste con el cuerpo serif */
+.prose h2,
+.prose h3 {
+  font-family: var(--ff-display);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-fg);
+  scroll-margin-top: 5rem;
+}
+.prose h2 {
+  font-size: 1.6em;
+  font-weight: 700;
+  margin-block: 1.8em 0.6em;
+}
+.prose h3 {
+  font-size: 1.3em;
+  font-weight: 500;
+  margin-block: 1.5em 0.5em;
+}
+
+/* Énfasis */
+.prose strong { font-weight: 600; }
+.prose em { font-style: italic; }
+
+/* Enlaces dentro del cuerpo: subrayado discreto */
+.prose a {
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--color-border);
+  transition: text-decoration-color 0.15s ease;
+  word-break: break-word;
+}
+.prose a:hover { text-decoration-color: var(--color-fg); }
+
+/* Listas (incluye la lista numerada de Fuentes) */
+.prose ul,
+.prose ol { margin-block: 0 1.4em; padding-inline-start: 1.4em; }
+.prose li { margin-block: 0.35em; padding-inline-start: 0.2em; }
+.prose ol { list-style: decimal; }
+.prose ul { list-style: disc; }
+
+/* La sección de Fuentes suele ir al final: enlaces largos legibles */
+.prose ol a { font-size: 0.92em; }
+
+/* Citas e imágenes por si aparecen en el futuro */
+.prose blockquote {
+  margin-block: 1.4em; padding-inline-start: 1.2em;
+  border-inline-start: 3px solid var(--color-border);
+  font-style: italic; color: var(--color-fg-muted);
+}
+.prose figure { margin-block: 1.6em; }
+.prose figure img { border-radius: 6px; }
+.prose figcaption {
+  font-family: var(--ff-mono); font-size: 0.78rem; color: var(--color-fg-subtle);
+  margin-top: var(--space-2); text-align: center;
+}
+.prose hr { border: 0; border-top: 1px solid var(--color-border); margin-block: 2.5em; }

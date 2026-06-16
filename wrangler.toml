@@ -1,7 +1,14 @@
 name                  = "takanolabs"
 compatibility_date    = "2024-09-23"
-pages_build_output_dir = "src"
 
+# Astro compila el blog a HTML estatico en dist/.
+# (En el dashboard de Cloudflare Pages: Build command = "npm run build",
+#  Output directory = "dist", Framework preset = Astro.)
+pages_build_output_dir = "dist"
+
+# --- D1: base operativa compartida (binding "DB") ---
+# Contiene: contactos (formulario de servicios) y, tras las migraciones del blog,
+# newsletter_blog_subscribers (0003) y article_views (0004).
 [[d1_databases]]
 binding       = "DB"
 database_name = "CalidadAlimentaria"

@@ -1,0 +1,20 @@
+---
+/* Tiempo de lectura (lo fija el autor en el frontmatter). */
+interface Props {
+  minutes?: number;
+  class?: string;
+}
+const { minutes, class: className } = Astro.props;
+---
+{minutes && minutes > 0 && (
+  <span class:list={['reading-time', className]}>{minutes} min de lectura</span>
+)}
+
+<style>
+  .reading-time {
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    color: var(--color-fg-subtle);
+    letter-spacing: 0.03em;
+  }
+</style>

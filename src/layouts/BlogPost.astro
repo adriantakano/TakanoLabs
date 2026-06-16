@@ -1,0 +1,216 @@
+---
+/* Layout de artículo (vista prioritaria: móvil). El cuerpo del .md va en el slot. */
+import BaseLayout from './BaseLayout.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import AuthorBlock from '../components/AuthorBlock.astro';
+import ReadingTime from '../components/ReadingTime.astro';
+import ShareButtons from '../components/ShareButtons.astro';
+import RelatedArticles from '../components/RelatedArticles.astro';
+import NewsletterInline from '../components/NewsletterInline.astro';
+import CTAServiciosWeb from '../components/CTAServiciosWeb.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { getCategory, getCategoryUrl, getArticleUrl } from '../config/categories';
+import { SITE } from '../config/site';
+import '../styles/prose.css';
+
+interface Props {
+  title: string;
+  description: string;
+  section: string;
+  slug: string;
+  pubDate: Date;
+  lastReviewed: Date;
+  readingTime?: number;
+  heroImage: string;
+  heroImageAlt: string;
+  ogImage: string;
+  canonicalURL?: string;
+  author: string;
+  authorRole: string;
+  authorImage?: string;
+  authorLinkedin?: string;
+}
+
+const p = Astro.props;
+const cat = getCategory(p.section);
+const segment = cat?.segment;
+const articleUrl = getArticleUrl(p.section, p.slug);
+const dateLabel = new Intl.DateTimeFormat('es-MX', {
+  day: 'numeric', month: 'long', year: 'numeric',
+}).format(p.pubDate);
+
+// --- JSON-LD: Article + BreadcrumbList ---
+const abs = (path: string) => (path.startsWith('http') ? path : new URL(path, SITE.url).href);
+const articleUrlAbs = abs(articleUrl);
+const ogAbs = abs(p.ogImage || SITE.defaultOgImage);
+const heroAbs = abs(p.heroImage);
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: p.title,
+  description: p.description,
+  image: [ogAbs, heroAbs],
+  datePublished: p.pubDate.toISOString(),
+  dateModified: p.lastReviewed.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: p.author,
+    ...(p.authorLinkedin ? { url: p.authorLinkedin } : {}),
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.name,
+    logo: { '@type': 'ImageObject', url: abs(SITE.logo) },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrlAbs },
+  inLanguage: 'es-MX',
+};
+
+const crumbs = [{ name: 'Inicio', item: SITE.url }];
+if (cat) crumbs.push({ name: cat.name, item: abs(getCategoryUrl(p.section)) });
+crumbs.push({ name: p.title, item: articleUrlAbs });
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: c.item,
+  })),
+};
+---
+<BaseLayout
+  title={p.title}
+  description={p.description}
+  ogImage={p.ogImage}
+  canonical={p.canonicalURL}
+  type="article"
+  activeSegment={segment}
+  preloadHero={p.heroImage}
+>
+  <Fragment slot="head">
+    <JsonLd schema={[articleSchema, breadcrumbSchema]} />
+  </Fragment>
+
+  <article class="post container">
+    <nav class="post__crumbs" aria-label="Ruta de navegación">
+      <a href="/">Inicio</a>
+      <span aria-hidden="true">/</span>
+      {cat && <a href={getCategoryUrl(p.section)}>{cat.name}</a>}
+    </nav>
+
+    <header class="post__header">
+      <CategoryBadge section={p.section} asText={true} size="md" />
+      <h1 class="post__title">{p.title}</h1>
+      <div class="post__meta">
+        <time datetime={p.pubDate.toISOString()}>{dateLabel}</time>
+        {p.readingTime && <span aria-hidden="true">·</span>}
+        <ReadingTime minutes={p.readingTime} />
+      </div>
+    </header>
+
+    <figure class="post__hero">
+      <img
+        src={p.heroImage}
+        alt={p.heroImageAlt}
+        width="1200"
+        height="675"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <figcaption>{p.heroImageAlt}</figcaption>
+    </figure>
+
+    <div class="post__author">
+      <AuthorBlock
+        author={p.author}
+        authorRole={p.authorRole}
+        authorImage={p.authorImage}
+        authorLinkedin={p.authorLinkedin}
+      />
+    </div>
+
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+
+  <ShareButtons url={articleUrl} title={p.title} />
+
+  <RelatedArticles section={p.section} currentSlug={p.slug} />
+
+  <NewsletterInline source={p.slug} />
+
+  <CTAServiciosWeb />
+</BaseLayout>
+
+<script define:vars={{ slug: p.slug, section: p.section }}>
+  // Conteo de vistas: 1 vez por sesión y slug, tras 5 s o 25 % de scroll.
+  (function () {
+    try {
+      const key = 'viewed:' + slug;
+      if (sessionStorage.getItem(key)) return;
+      let done = false;
+      let timer;
+      const onScroll = () => {
+        const h = document.documentElement;
+        const max = h.scrollHeight - h.clientHeight || 1;
+        if (h.scrollTop / max > 0.25) send();
+      };
+      const send = () => {
+        if (done) return;
+        done = true;
+        try { sessionStorage.setItem(key, '1'); } catch {}
+        clearTimeout(timer);
+        window.removeEventListener('scroll', onScroll);
+        fetch('/api/view', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, section }),
+        }).catch(() => {});
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      timer = setTimeout(send, 5000);
+    } catch (e) { /* no-op */ }
+  })();
+</script>
+
+<style>
+  .post { padding-block: var(--space-6) var(--space-8); }
+  .post__crumbs {
+    display: flex; gap: var(--space-2); align-items: center;
+    font-family: var(--ff-mono); font-size: 0.72rem; color: var(--color-fg-subtle);
+    margin-bottom: var(--space-6); max-width: var(--content-max); margin-inline: auto;
+  }
+  .post__crumbs a { transition: opacity 0.15s ease; }
+  .post__crumbs a:hover { opacity: 0.6; }
+
+  .post__header { max-width: var(--content-max); margin-inline: auto; }
+  .post__title {
+    font-family: var(--ff-display); font-weight: 700;
+    font-size: clamp(1.9rem, 6.5vw, 3rem); line-height: 1.1; letter-spacing: -0.03em;
+    margin-block: var(--space-3) var(--space-4);
+  }
+  .post__meta {
+    display: flex; align-items: center; gap: var(--space-2);
+    font-family: var(--ff-mono); font-size: 0.72rem; color: var(--color-fg-subtle);
+  }
+
+  .post__hero { margin-block: var(--space-8); }
+  .post__hero img {
+    width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+    border-radius: 8px; background: #ededed;
+  }
+  .post__hero figcaption {
+    font-family: var(--ff-mono); font-size: 0.72rem; color: var(--color-fg-subtle);
+    margin-top: var(--space-2); max-width: var(--content-max); margin-inline: auto;
+  }
+
+  .post__author {
+    max-width: var(--content-max); margin-inline: auto;
+    padding-block: var(--space-4); margin-bottom: var(--space-6);
+    border-block: 1px solid var(--color-border);
+  }
+</style>

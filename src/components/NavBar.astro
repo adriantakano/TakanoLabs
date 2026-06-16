@@ -1,0 +1,157 @@
+---
+/* Barra superior. Escritorio: logo izq · categorías centro (en su color) ·
+   LinkedIn + Newsletter der. Móvil: hamburguesa accesible. */
+import { CATEGORY_LIST } from '../config/categories';
+import { SITE } from '../config/site';
+
+interface Props {
+  /** segmento de la categoría activa, para marcar aria-current */
+  activeSegment?: string;
+}
+const { activeSegment } = Astro.props;
+---
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="nav__logo" href="/" aria-label={`${SITE.name} — inicio`}>
+      <img src={SITE.logo} alt={SITE.name} width="105" height="30" />
+    </a>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label="Abrir menú"
+    >
+      <span class="nav__bars" aria-hidden="true"></span>
+    </button>
+
+    <nav id="nav-menu" class="nav__menu" aria-label="Navegación principal">
+      <ul class="nav__cats" role="list">
+        {CATEGORY_LIST.map((c) => (
+          <li>
+            <a
+              href={`/${c.segment}`}
+              style={`--cat:${c.color}`}
+              aria-current={activeSegment === c.segment ? 'page' : undefined}
+            >
+              {c.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="nav__actions">
+        <a
+          class="nav__icon"
+          href={SITE.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+          </svg>
+        </a>
+        <a class="nav__newsletter" href="/#newsletter">Newsletter</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: var(--z-nav);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .nav__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-4); min-height: 60px;
+  }
+  .nav__logo { display: inline-flex; align-items: center; }
+  .nav__logo img { height: 30px; width: auto; }
+
+  .nav__menu { display: flex; align-items: center; gap: var(--space-8); }
+  .nav__cats {
+    display: flex; align-items: center; gap: var(--space-6);
+    margin: 0; padding: 0;
+  }
+  .nav__cats a {
+    font-family: var(--ff-display); font-weight: 700; font-size: 0.95rem;
+    color: var(--cat); transition: opacity 0.15s ease;
+  }
+  .nav__cats a:hover { opacity: 0.7; }
+  .nav__cats a[aria-current='page'] { text-decoration: underline; text-underline-offset: 5px; }
+
+  .nav__actions { display: flex; align-items: center; gap: var(--space-4); }
+  .nav__icon {
+    color: var(--color-fg); display: inline-flex; padding: 6px;
+    transition: opacity 0.15s ease;
+  }
+  .nav__icon:hover { opacity: 0.65; }
+  .nav__newsletter {
+    font-family: var(--ff-display); font-weight: 700; font-size: 0.9rem;
+    background: var(--color-fg); color: var(--color-bg);
+    padding: 0.5rem 0.9rem; border-radius: 999px;
+    transition: opacity 0.15s ease;
+  }
+  .nav__newsletter:hover { opacity: 0.85; }
+
+  /* Hamburguesa */
+  .nav__toggle {
+    display: none; background: none; border: 0;
+    width: 44px; height: 44px; align-items: center; justify-content: center;
+    color: var(--color-fg);
+  }
+  .nav__bars, .nav__bars::before, .nav__bars::after {
+    content: ''; display: block; width: 22px; height: 2px;
+    background: currentColor; transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .nav__bars { position: relative; }
+  .nav__bars::before { position: absolute; top: -7px; left: 0; }
+  .nav__bars::after { position: absolute; top: 7px; left: 0; }
+
+  /* ---- Móvil ---- */
+  @media (max-width: 767px) {
+    .nav__toggle { display: inline-flex; }
+    .nav__menu {
+      position: absolute; left: 0; right: 0; top: 100%;
+      flex-direction: column; align-items: flex-start; gap: var(--space-6);
+      background: var(--color-bg); border-bottom: 1px solid var(--color-border);
+      padding: var(--space-6) var(--space-4);
+      transform: translateY(-8px); opacity: 0; pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .nav[data-open='true'] .nav__menu { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    .nav[data-open='true'] .nav__bars { background: transparent; }
+    .nav[data-open='true'] .nav__bars::before { transform: translateY(7px) rotate(45deg); }
+    .nav[data-open='true'] .nav__bars::after { transform: translateY(-7px) rotate(-45deg); }
+    .nav__cats { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+    .nav__cats a { font-size: 1.25rem; }
+    .nav__actions { gap: var(--space-6); }
+  }
+</style>
+
+<script>
+  // Menú hamburguesa: única isla de JS permitida (junto con "Más leídos").
+  const header = document.querySelector('.nav');
+  const toggle = header?.querySelector('.nav__toggle');
+  if (header && toggle) {
+    const setOpen = (open: boolean) => {
+      header.setAttribute('data-open', String(open));
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    };
+    toggle.addEventListener('click', () => {
+      setOpen(header.getAttribute('data-open') !== 'true');
+    });
+    // Cerrar al pulsar un enlace o con Escape.
+    header.querySelectorAll('.nav__menu a').forEach((a) =>
+      a.addEventListener('click', () => setOpen(false)),
+    );
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  }
+</script>

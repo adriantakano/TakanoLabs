@@ -1,0 +1,114 @@
+---
+/* "Más leídos" — sin penalizar SEO ni CLS.
+   · Fallback estático en build (enlaces internos reales).
+   · Manifiesto slug -> {title,url,name,color,thumb,alt} de TODOS los artículos.
+   · Island ligero: fetch('/api/most-read') y sustituye usando el manifiesto. */
+import { getCollection } from 'astro:content';
+import { getCategory, getArticleUrl } from '../config/categories';
+
+interface Props {
+  excludeSlug?: string;
+  limit?: number;
+}
+const { excludeSlug, limit = 4 } = Astro.props;
+
+const all = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const manifest: Record<string, { title: string; url: string; name: string; color: string; thumb: string; alt: string }> = {};
+for (const p of all) {
+  const cat = getCategory(p.data.section);
+  manifest[p.data.slug] = {
+    title: p.data.title,
+    url: getArticleUrl(p.data.section, p.data.slug),
+    name: cat?.name ?? '',
+    color: cat?.color ?? '#0a0a0a',
+    thumb: p.data.heroImage,
+    alt: p.data.heroImageAlt,
+  };
+}
+
+const fallback = all
+  .filter((p) => p.data.slug !== excludeSlug)
+  .slice(0, limit)
+  .map((p) => p.data.slug);
+---
+<section class="mr" aria-labelledby="mr-title">
+  <h2 id="mr-title" class="mr__title">Lo más leído</h2>
+  <ul class="mr__grid" role="list" data-most-read>
+    {fallback.map((slug) => {
+      const m = manifest[slug];
+      return (
+        <li class="mr__item">
+          <a class="mr__link" href={m.url}>
+            <span class="mr__thumb">
+              <img src={m.thumb} alt={m.alt} width="600" height="338" loading="lazy" decoding="async" />
+            </span>
+            <span class="mr__cat" style={`color:${m.color}`}>{m.name}</span>
+            <span class="mr__t">{m.title}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+  <script type="application/json" data-mr-manifest set:html={JSON.stringify(manifest)}></script>
+</section>
+
+<style>
+  .mr__title {
+    font-family: var(--ff-mono); font-size: 0.78rem; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-fg-subtle);
+    padding-bottom: var(--space-3); margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .mr__grid { display: grid; gap: var(--space-8); grid-template-columns: 1fr; }
+  @media (min-width: 480px) { .mr__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .mr__grid { gap: var(--space-8) var(--space-6); } }
+
+  .mr__link { display: flex; flex-direction: column; gap: var(--space-2); }
+  .mr__thumb {
+    display: block; overflow: hidden; border-radius: 8px;
+    background: #ededed; aspect-ratio: 16 / 9;
+  }
+  .mr__thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+  .mr__item:hover .mr__thumb img { transform: scale(1.03); }
+  .mr__cat {
+    font-family: var(--ff-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .mr__t {
+    font-family: var(--ff-display); font-weight: 700; font-size: 1.05rem; line-height: 1.18;
+    letter-spacing: -0.02em; transition: opacity 0.15s ease;
+  }
+  .mr__item:hover .mr__t { opacity: 0.7; }
+</style>
+
+<script>
+  const root = document.querySelector('[data-most-read]');
+  const manifestEl = document.querySelector('[data-mr-manifest]');
+  if (root && manifestEl) {
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    let manifest: Record<string, { title: string; url: string; name: string; color: string; thumb: string; alt: string }> = {};
+    try { manifest = JSON.parse(manifestEl.textContent || '{}'); } catch { manifest = {}; }
+
+    fetch('/api/most-read')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const items = data?.items;
+        if (!Array.isArray(items) || items.length === 0) return;
+        const rows = items
+          .map((it: { slug: string }) => manifest[it.slug])
+          .filter(Boolean)
+          .map(
+            (m) => `<li class="mr__item"><a class="mr__link" href="${m.url}">` +
+              `<span class="mr__thumb"><img src="${esc(m.thumb)}" alt="${esc(m.alt)}" width="600" height="338" loading="lazy" decoding="async"></span>` +
+              `<span class="mr__cat" style="color:${esc(m.color)}">${esc(m.name)}</span>` +
+              `<span class="mr__t">${esc(m.title)}</span></a></li>`,
+          )
+          .join('');
+        if (rows) root.innerHTML = rows;
+      })
+      .catch(() => { /* mantener fallback */ });
+  }
+</script>

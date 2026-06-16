@@ -1,0 +1,54 @@
+---
+/* Artículos relacionados (estático en build). Prioriza la misma sección;
+   completa con recientes de otras secciones si faltan. */
+import { getCollection } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props {
+  section: string;
+  currentSlug: string;
+  limit?: number;
+}
+const { section, currentSlug, limit = 3 } = Astro.props;
+
+const all = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((p) => p.data.slug !== currentSlug)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const sameSection = all.filter((p) => p.data.section === section);
+const others = all.filter((p) => p.data.section !== section);
+const related = [...sameSection, ...others].slice(0, limit);
+---
+{related.length > 0 && (
+  <section class="related container" aria-labelledby="related-title">
+    <h2 id="related-title" class="related__title">Sigue leyendo</h2>
+    <ul class="related__grid" role="list">
+      {related.map((post) => (
+        <li>
+          <ArticleCard
+            section={post.data.section}
+            slug={post.data.slug}
+            title={post.data.title}
+            heroImage={post.data.heroImage}
+            heroImageAlt={post.data.heroImageAlt}
+            pubDate={post.data.pubDate}
+            readingTime={post.data.readingTime}
+            variant="small"
+          />
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .related { padding-block: var(--space-8); }
+  .related__title {
+    font-family: var(--ff-mono); font-size: 0.78rem; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-fg-subtle);
+    padding-bottom: var(--space-3); margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .related__grid { display: grid; gap: var(--space-8); grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .related__grid { grid-template-columns: repeat(3, 1fr); } }
+</style>

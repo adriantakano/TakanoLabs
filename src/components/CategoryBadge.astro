@@ -1,0 +1,39 @@
+---
+/* Etiqueta de categoría en su color de marca. Deriva todo del mapa canónico. */
+import { getCategory, getCategoryUrl } from '../config/categories';
+
+interface Props {
+  section: string;
+  /** si es true, no enlaza (útil sobre el H1 del artículo) */
+  asText?: boolean;
+  size?: 'sm' | 'md';
+}
+
+const { section, asText = false, size = 'sm' } = Astro.props;
+const cat = getCategory(section);
+---
+{cat && (
+  asText ? (
+    <span class:list={['badge', size]} style={`--cat:${cat.color}`}>{cat.name}</span>
+  ) : (
+    <a class:list={['badge', size]} style={`--cat:${cat.color}`} href={getCategoryUrl(section)}>
+      {cat.name}
+    </a>
+  )
+)}
+
+<style>
+  .badge {
+    font-family: var(--ff-mono);
+    font-weight: 400;
+    color: var(--cat);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    display: inline-block;
+  }
+  .sm { font-size: 0.72rem; }
+  .md { font-size: 0.82rem; }
+  a.badge { transition: opacity 0.15s ease; }
+  a.badge:hover { opacity: 0.7; }
+</style>

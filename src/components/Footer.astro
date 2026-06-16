@@ -1,0 +1,75 @@
+---
+/* Footer invertido: fondo negro, texto blanco. Presente en todas las páginas. */
+import { CATEGORY_LIST } from '../config/categories';
+import { SITE } from '../config/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__wordmark">Takano&nbsp;Labs</span>
+      <p class="footer__tag">Ciencia, tecnología y sociedad, explicadas para México.</p>
+    </div>
+
+    <nav class="footer__col" aria-label="Secciones">
+      <h2 class="footer__title">Secciones</h2>
+      <ul role="list">
+        {CATEGORY_LIST.map((c) => (
+          <li><a href={`/${c.segment}`}>{c.name}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h2 class="footer__title">Servicios</h2>
+      <ul role="list">
+        <li><a href={SITE.servicesUrl}>Diseño y desarrollo web</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+        <li>
+          <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <span>© {year} {SITE.name}. Todos los derechos reservados.</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-footer-bg);
+    color: var(--color-footer-fg);
+    margin-top: var(--space-16);
+  }
+  .footer__inner {
+    display: grid; gap: var(--space-8);
+    padding-block: var(--space-12) var(--space-8);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .footer__inner { grid-template-columns: 2fr 1fr 1fr; gap: var(--space-12); }
+  }
+  .footer__wordmark { font-family: var(--ff-display); font-weight: 700; font-size: 1.5rem; }
+  .footer__tag {
+    font-family: var(--ff-body), Georgia, serif;
+    color: var(--color-footer-muted); margin-top: var(--space-2); max-width: 28ch;
+  }
+  .footer__title {
+    font-family: var(--ff-mono); font-size: 0.72rem; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--color-footer-muted); margin-bottom: var(--space-3);
+  }
+  .footer__col ul { display: flex; flex-direction: column; gap: var(--space-2); }
+  .footer__col a {
+    font-family: var(--ff-display); font-weight: 500; font-size: 0.95rem;
+    color: var(--color-footer-fg); transition: opacity 0.15s ease;
+  }
+  .footer__col a:hover { opacity: 0.65; }
+  .footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-block: var(--space-6);
+    font-family: var(--ff-mono); font-size: 0.72rem; color: var(--color-footer-muted);
+  }
+</style>

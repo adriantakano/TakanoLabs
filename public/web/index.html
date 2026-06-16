@@ -11,18 +11,18 @@
     <title>TakanoLabs — Diseño Web Profesional para PYMEs</title>
 
     <!-- Preload fuentes locales críticas -->
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/space-grotesk-v16-latin-500.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/space-grotesk-v16-latin-700.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/inter-v13-latin-regular.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/space-grotesk-v16-latin-500.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/space-grotesk-v16-latin-700.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-v13-latin-regular.woff2">
 
     <!-- CSS CRÍTICO inline — fonts + reset + nav + hero -->
      <!-- CSS CRÍTICO inline — fonts + reset + nav + hero -->
     <style>
-        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/space-grotesk-v16-latin-500.woff2') format('woff2')}
-        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/space-grotesk-v16-latin-700.woff2') format('woff2')}
-        @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/inter-v13-latin-regular.woff2') format('woff2')}
-        @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/inter-v13-latin-500.woff2') format('woff2')}
-        @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/jetbrains-mono-v18-latin-regular.woff2') format('woff2')}
+        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/space-grotesk-v16-latin-500.woff2') format('woff2')}
+        @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/space-grotesk-v16-latin-700.woff2') format('woff2')}
+        @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/inter-v13-latin-regular.woff2') format('woff2')}
+        @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/inter-v13-latin-500.woff2') format('woff2')}
+        @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/jetbrains-mono-v18-latin-regular.woff2') format('woff2')}
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
         :root{--clr-bg:#FAFAF8;--clr-bg-alt:#F4F4F0;--clr-surface:#FFFFFF;--clr-text:#0A0A0B;--clr-text-soft:#737373;--clr-accent:#4F46E5;--clr-accent-light:#818CF8;--clr-accent-bg:rgba(79,70,229,.08);--clr-border:#E7E5E4;--clr-dark:#0A0A0B;--clr-dark-soft:#1A1A1D;--clr-white:#FFFFFF;--ff-display:'Space Grotesk',system-ui,sans-serif;--ff-body:'Inter',system-ui,sans-serif;--ff-mono:'JetBrains Mono',ui-monospace,monospace;--space-xs:.5rem;--space-sm:1rem;--space-md:2rem;--space-lg:4rem;--space-xl:6rem;--space-2xl:8rem;--radius:14px;--radius-sm:8px;--shadow:0 2px 20px rgba(10,10,11,.06);--transition:.35s cubic-bezier(.4,0,.2,1)}
         html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:80px}
@@ -83,8 +83,8 @@
     </style>
 
     <!-- Resto del CSS (no crítico) -->
-    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null;" href="css/style.css">
-    <noscript><link rel="stylesheet" href="css/style.css"></noscript>
+    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null;" href="/css/style.css">
+    <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
 </head>
 
 <body>
@@ -92,15 +92,15 @@
     <!-- ===================== NAV ===================== -->
     <header class="nav" id="nav">
         <div class="nav__inner">
-            <a href="diseñoweb.html" class="nav__logo" aria-label="TakanoLabs">
-                <img src="img/Logo1.webp" alt="TakanoLabs" width="1091" height="312">
+            <a href="/web" class="nav__logo" aria-label="TakanoLabs">
+                <img src="/img/Logo1.webp" alt="TakanoLabs" width="1091" height="312">
             </a>
             <button class="nav__toggle" id="navToggle" aria-label="Menú">
                 <span></span><span></span><span></span>
             </button>
             <nav class="nav__menu" id="navMenu">
-                <a href="diseñoweb.html" class="nav__link nav__link--active">Diseño web</a>
-                <a href="contacto.html" class="nav__link nav__link--cta">Contacto</a>
+                <a href="/web" class="nav__link nav__link--active">Diseño web</a>
+                <a href="/contacto" class="nav__link nav__link--cta">Contacto</a>
             </nav>
         </div>
     </header>
@@ -109,8 +109,8 @@
     <section class="hero" id="hero">
         <div class="hero__video-wrap">
             <!-- El video generado con IA va aquí. Loop silencioso. -->
-            <video autoplay muted loop playsinline poster="img/hero-poster.webp">
-                <source src="img/hero.mp4" type="video/mp4">
+            <video autoplay muted loop playsinline poster="/img/hero-poster.webp">
+                <source src="/img/hero.mp4" type="video/mp4">
             </video>
         </div>
         <div class="hero__overlay"></div>
@@ -125,7 +125,7 @@
             </p>
             <div class="hero__actions reveal reveal--delay-2">
                 <a href="#paquetes" class="btn btn--primary">Ver paquetes</a>
-                <a href="contacto.html" class="btn btn--outline" style="color:#fff;border-color:rgba(255,255,255,.25)">Agenda diagnóstico</a>
+                <a href="/contacto" class="btn btn--outline" style="color:#fff;border-color:rgba(255,255,255,.25)">Agenda diagnóstico</a>
             </div>
         </div>
     </section>
@@ -142,7 +142,7 @@
             </p>
 
             <figure class="section__visual reveal">
-                <img src="img/Cloudflare-style.webp"
+                <img src="/img/Cloudflare-style.webp"
                     alt="Red global distribuida con nodos de Cloudflare orbitando un globo minimalista"
                     width="1200" height="675" loading="lazy" decoding="async">
             </figure>
@@ -256,7 +256,7 @@
             </p>
 
             <figure class="section__visual reveal">
-                <img src="img/Workersserverless.webp"
+                <img src="/img/Workersserverless.webp"
                     alt="Arquitectura serverless representada como un cubo energético con trazos de circuito"
                     width="1200" height="675" loading="lazy" decoding="async">
             </figure>
@@ -416,7 +416,7 @@
 
     <!-- ===================== CTA FINAL ===================== -->
     <section class="cta-final cta-final--bg">
-        <img class="cta-final__bg" src="img/craftvisual.webp"
+        <img class="cta-final__bg" src="/img/craftvisual.webp"
             alt="" aria-hidden="true" loading="lazy" decoding="async">
         <div class="container">
             <span class="section__label reveal" style="background:transparent;border-color:rgba(255,255,255,.15);color:var(--clr-accent-light)">// Siguiente paso</span>
@@ -425,7 +425,7 @@
                 Revisión de requerimientos sin compromiso. Te proponemos el paquete adecuado
                 con alcance, cronograma y condiciones claras.
             </p>
-            <a href="contacto.html" class="btn btn--light reveal">Agenda diagnóstico gratuito</a>
+            <a href="/contacto" class="btn btn--light reveal">Agenda diagnóstico gratuito</a>
         </div>
     </section>
 
@@ -434,14 +434,14 @@
         <div class="container footer__inner">
             <span class="footer__copy">© 2026 TakanoLabs · Allende, Nuevo León · MX</span>
             <div class="footer__links">
-                <a href="diseñoweb.html">Diseño web</a>
-                <a href="contacto.html">Contacto</a>
-                <a href="index.html">Blog</a>
+                <a href="/web">Diseño web</a>
+                <a href="/contacto">Contacto</a>
+                <a href="/web">Blog</a>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

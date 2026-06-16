@@ -1,0 +1,8 @@
+---
+/* Emite datos estructurados JSON-LD. Acepta un objeto o un arreglo de objetos. */
+interface Props {
+  schema: Record<string, unknown> | Record<string, unknown>[];
+}
+const { schema } = Astro.props;
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

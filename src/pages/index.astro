@@ -1,0 +1,80 @@
+---
+/* Home editorial. Escritorio: tarjeta grande (reciente) izq + rejilla "más leídos"
+   der (estilo The Verge). Móvil: apilado. El widget dinámico "Más leídos"
+   (fetch /api/most-read) se conecta en la Fase 3; aquí queda el fallback estático. */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import MostRead from '../components/MostRead.astro';
+import NewsletterInline from '../components/NewsletterInline.astro';
+import { SITE } from '../config/site';
+
+const all = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const featured = all.find((p) => p.data.featured) ?? all[0];
+---
+<BaseLayout
+  title={`${SITE.name} — Blog`}
+  description={SITE.description}
+  ogImage={SITE.defaultOgImage}
+>
+  <div class="container home">
+    {featured ? (
+      <section class="home__lead" aria-label="Artículo reciente">
+        <ArticleCard
+          section={featured.data.section}
+          slug={featured.data.slug}
+          title={featured.data.title}
+          description={featured.data.description}
+          heroImage={featured.data.heroImage}
+          heroImageAlt={featured.data.heroImageAlt}
+          pubDate={featured.data.pubDate}
+          readingTime={featured.data.readingTime}
+          variant="large"
+          eager={true}
+        />
+      </section>
+
+      <aside class="home__aside">
+        <MostRead excludeSlug={featured?.data.slug} />
+      </aside>
+    ) : (
+      <p class="home__empty">Pronto publicaremos los primeros artículos.</p>
+    )}
+  </div>
+
+  <div class="container">
+    <NewsletterInline />
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    padding-block: var(--space-8) var(--space-8);
+    display: grid; gap: var(--space-12);
+    grid-template-columns: 1fr;
+  }
+  .home__section-title {
+    font-family: var(--ff-mono); font-size: 0.78rem; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-fg-subtle);
+    padding-bottom: var(--space-3); margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .home__grid { display: grid; gap: var(--space-8); grid-template-columns: 1fr; }
+  @media (min-width: 480px) { .home__grid { grid-template-columns: repeat(2, 1fr); } }
+  .home__empty { font-family: var(--ff-body), Georgia, serif; color: var(--color-fg-muted); }
+
+  /* Escritorio: dos columnas tipo The Verge */
+  @media (min-width: 1024px) {
+    .home {
+      grid-template-columns: 1.5fr 1fr;
+      gap: var(--space-16);
+      align-items: start;
+      padding-block: var(--space-12);
+    }
+    .home__aside { position: sticky; top: 80px; }
+    .home__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-8) var(--space-6); }
+  }
+</style>

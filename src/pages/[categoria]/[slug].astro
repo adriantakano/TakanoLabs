@@ -1,0 +1,42 @@
+---
+/* Artículo: /{segmento}/{slug}. La URL se deriva de section -> segment.
+   Ej.: section "pulso-urbano" => /social/{slug} (nunca /pulso-urbano/). */
+import { getCollection, render } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { getCategory } from '../../config/categories';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return posts.map((entry) => {
+    const cat = getCategory(entry.data.section);
+    return {
+      params: { categoria: cat!.segment, slug: entry.data.slug },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<BlogPost
+  title={d.title}
+  description={d.description}
+  section={d.section}
+  slug={d.slug}
+  pubDate={d.pubDate}
+  lastReviewed={d.lastReviewed}
+  readingTime={d.readingTime}
+  heroImage={d.heroImage}
+  heroImageAlt={d.heroImageAlt}
+  ogImage={d.ogImage}
+  canonicalURL={d.canonicalURL}
+  author={d.author}
+  authorRole={d.authorRole}
+  authorImage={d.authorImage}
+  authorLinkedin={d.authorLinkedin}
+>
+  <Content />
+</BlogPost>

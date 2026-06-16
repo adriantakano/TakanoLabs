@@ -1,0 +1,9 @@
+# =============================================================
+# Cloudflare Pages — Redirecciones
+# Sitio de servicios: /diseñoweb (antiguo, con ñ -> %C3%B1) => /web (ASCII)
+# Se conservan ambas formas (literal y codificada) + .html para no perder SEO.
+# =============================================================
+/diseñoweb         /web   301
+/dise%C3%B1oweb    /web   301
+/diseñoweb.html    /web   301
+/diseñoweb/*       /web   301

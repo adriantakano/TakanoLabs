@@ -1,0 +1,32 @@
+---
+/* Página de categoría: /quimica · /economia · /social
+   Los segmentos salen del mapa canónico (NO del nombre de carpeta del .md). */
+import { getCollection } from 'astro:content';
+import CategoryPage from '../../layouts/CategoryPage.astro';
+import { CATEGORY_LIST } from '../../config/categories';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+
+  return CATEGORY_LIST.map((c) => {
+    const posts = all
+      .filter((p) => p.data.section === c.section)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+      .map((p) => ({
+        section: p.data.section,
+        slug: p.data.slug,
+        title: p.data.title,
+        description: p.data.description,
+        heroImage: p.data.heroImage,
+        heroImageAlt: p.data.heroImageAlt,
+        pubDate: p.data.pubDate,
+        readingTime: p.data.readingTime,
+      }));
+
+    return { params: { categoria: c.segment }, props: { section: c.section, posts } };
+  });
+}
+
+const { section, posts } = Astro.props;
+---
+<CategoryPage section={section} posts={posts} />

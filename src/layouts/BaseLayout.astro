@@ -1,0 +1,87 @@
+---
+/* Shell HTML de todas las páginas del blog. */
+import '../styles/global.css';
+import SEOHead from '../components/SEOHead.astro';
+import NavBar from '../components/NavBar.astro';
+import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { SITE } from '../config/site';
+
+// JSON-LD global: WebSite + Organization (presente en todas las páginas).
+const globalSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    inLanguage: 'es-MX',
+    description: SITE.description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.url,
+    logo: new URL(SITE.logo, SITE.url).href,
+    sameAs: [SITE.linkedin],
+  },
+];
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  activeSegment?: string;
+  /** ruta de la imagen LCP a precargar (hero del artículo) */
+  preloadHero?: string;
+  robots?: string;
+}
+
+const {
+  title, description, canonical, ogImage, type = 'website', activeSegment, preloadHero,
+  robots = 'index, follow',
+} = Astro.props;
+---
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Takano Labs — Blog" href="/rss.xml" />
+
+    <!-- Fuente crítica de UI (titulares/nav). Newsreader (cuerpo) usa swap + fallback. -->
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk-v16-latin-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {preloadHero && (
+      <link rel="preload" href={preloadHero} as="image" fetchpriority="high" />
+    )}
+
+    <SEOHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      type={type}
+      robots={robots}
+    />
+    <JsonLd schema={globalSchema} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <NavBar activeSegment={activeSegment} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
