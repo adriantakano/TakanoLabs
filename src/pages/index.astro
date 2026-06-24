@@ -14,6 +14,9 @@ const all = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 );
 
 const featured = all.find((p) => p.data.featured) ?? all[0];
+
+// "Últimos artículos": los más recientes de todas las secciones, sin repetir el destacado.
+const latest = all.filter((p) => p.id !== featured?.id).slice(0, 6);
 ---
 <BaseLayout
   title={`${SITE.name} — Blog`}
@@ -45,6 +48,29 @@ const featured = all.find((p) => p.data.featured) ?? all[0];
     )}
   </div>
 
+  {latest.length > 0 && (
+    <section class="container latest" aria-labelledby="latest-title">
+      <h2 id="latest-title" class="latest__title">Últimos artículos</h2>
+      <ul class="latest__grid" role="list">
+        {latest.map((post) => (
+          <li>
+            <ArticleCard
+              section={post.data.section}
+              slug={post.data.slug}
+              title={post.data.title}
+              description={post.data.description}
+              heroImage={post.data.heroImage}
+              heroImageAlt={post.data.heroImageAlt}
+              pubDate={post.data.pubDate}
+              readingTime={post.data.readingTime}
+              variant="small"
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <div class="container">
     <NewsletterInline />
   </div>
@@ -66,13 +92,30 @@ const featured = all.find((p) => p.data.featured) ?? all[0];
   @media (min-width: 480px) { .home__grid { grid-template-columns: repeat(2, 1fr); } }
   .home__empty { font-family: var(--ff-body), Georgia, serif; color: var(--color-fg-muted); }
 
+  /* Sección "Últimos artículos" (full-width, debajo del hero) */
+  .latest {
+    padding-block: var(--space-8) var(--space-12);
+    border-top: 1px solid var(--color-border);
+  }
+  .latest__title {
+    font-family: var(--ff-mono); font-size: 0.78rem; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-fg-subtle);
+    padding-bottom: var(--space-3); margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .latest__grid { display: grid; gap: var(--space-8); grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .latest__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) {
+    .latest__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-12) var(--space-8); }
+  }
+
   /* Escritorio: dos columnas tipo The Verge */
   @media (min-width: 1024px) {
     .home {
       grid-template-columns: 1.5fr 1fr;
       gap: var(--space-16);
       align-items: start;
-      padding-block: var(--space-12);
+      padding-block: var(--space-12) var(--space-8);
     }
     .home__aside { position: sticky; top: 80px; }
     .home__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-8) var(--space-6); }
